@@ -17,9 +17,8 @@ const error_msg = document.querySelector('#error-message');
 const item_suggestion = document.querySelector('.item-suggestion')
 const div_suggestion =document.querySelector('#suggestions');
 
-console.log(div_suggestion)
 //Funções
-const getWeatherData = async(city) => {
+const getWeatherData = async(city) => { //função para buscar dados da API
   const apiWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}&lang=pt_br`;
   const res = await fetch(apiWeatherURL);
   const data = await res.json();
@@ -27,7 +26,7 @@ const getWeatherData = async(city) => {
   return data; //retornando os dados da api
 }
 
-const getImage = async(city) => {
+const getImage = async(city) => { //função para buscar dados da API de imagens aleartorias
   const apiImageURL = `https://api.unsplash.com/search/photos?page=1&query=${encodeURIComponent(city)}&client_id=${apiAcesskey}`;
   const res = await fetch(apiImageURL);
   const data = await res.json();
@@ -35,18 +34,17 @@ const getImage = async(city) => {
   console.log(data.results[0].urls.full);
 }
 
-const getIconWheater = async (iconCode) => {
+const getIconWheater = async (iconCode) => { //função para buscar imagens de bandeiras dos paises
   const iconURL = `https://openweathermap.org/img/wn/${iconCode}.png`;
   const response = await fetch(iconURL);
   const icon = await response.blob();
   return URL.createObjectURL(icon);
 };
 
-const showWeatherData = async (city) => {
+const showWeatherData = async (city) => {//função para exibir os dados na tela
   try {
     if(error_msg.className != "hide"){
       error_msg.classList.add("hide");
-     // console.log("Diferente de hide");
     }
     const data = await getWeatherData(city);
     const iconURL = await getIconWheater(data.weather[0].icon);//chamando função assincornas para exibir icone
@@ -65,7 +63,7 @@ const showWeatherData = async (city) => {
 
 
 //Eventos
-searchBtn.addEventListener('click', (e) => {
+searchBtn.addEventListener('click', (e) => {//chama função ao clicar no btn pesquisar
   e.preventDefault(); //não enviar formulario
   const city = cityInput.value;
   getImage(city);
@@ -76,14 +74,12 @@ addEventListener('keypress', (e) => { //chamar funções ao clicar no enter
   if(e.key === "Enter"){
     e.preventDefault(); //não enviar formulario
     const city = cityInput.value;
-  
     showWeatherData(city);
   }
 })
 
-div_suggestion.addEventListener('click', (e) =>{
+div_suggestion.addEventListener('click', (e) =>{//selecionar as cidades de sugestão
+  e.preventDefault();
   const item = e.target;
-  
-  console.log(item.innerText);
   showWeatherData(item.innerText);
 })
