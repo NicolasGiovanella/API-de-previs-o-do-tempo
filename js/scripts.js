@@ -16,6 +16,7 @@ const descElement = document.querySelector('#description');
 const error_msg = document.querySelector('#error-message');
 const item_suggestion = document.querySelector('.item-suggestion')
 const div_suggestion =document.querySelector('#suggestions');
+const loader =document.querySelector('#loader');
 
 //Funções
 const getWeatherData = async(city) => { //função para buscar dados da API
@@ -46,6 +47,8 @@ const showWeatherData = async (city) => {//função para exibir os dados na tela
     if(error_msg.className != "hide"){
       error_msg.classList.add("hide");
     }
+    weatherData.classList.add("hide");
+    loader.classList.remove("hide");
     const data = await getWeatherData(city);
     const iconURL = await getIconWheater(data.weather[0].icon);//chamando função assincornas para exibir icone
     iconWeather.setAttribute("src", iconURL);
@@ -53,6 +56,7 @@ const showWeatherData = async (city) => {//função para exibir os dados na tela
     tempElement.innerText = parseInt(data.main.temp);//convertendo para inteiro
     descElement.innerText = data.weather[0].description;
     iconcountry.setAttribute("src", `https://flagsapi.com/${data.sys.country}/shiny/64.png`);
+    loader.classList.add("hide");
     weatherData.classList.remove("hide");
   } catch (error) {
     error_msg.classList.remove("hide");
